@@ -6,6 +6,7 @@ class CustomUser(AbstractUser):
     is_shop_owner = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=True)
     is_creditor = models.BooleanField(default=True)
+    phone_number = models.CharField(max_length=15, unique=True)
 
 
 class Debt(models.Model):

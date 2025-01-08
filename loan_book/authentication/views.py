@@ -31,13 +31,16 @@ class LoginUserView(APIView):
     """
 
     def post(self, request):
-        username = request.data.get("username")
+        phone_number = request.data.get("phone_number")
         password = request.data.get("password")
 
+        if not phone_number or not password:
+            return Response({"error": "Phone_number and password are required"}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            user = get_user_model().objects.get(username=username)
+            user = get_user_model().objects.get(phone_number=phone_number)
         except get_user_model().DoesNotExist:
-            return Response({"error": "Invalid username or password"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Invalid phone_number or password"}, status=status.HTTP_400_BAD_REQUEST)
 
         if user.check_password(password):
             refresh = RefreshToken.for_user(user)
@@ -46,4 +49,5 @@ class LoginUserView(APIView):
                 "access": access_token,
                 "refresh": str(refresh),
             })
-        return Response({"error": "Invalid username or password"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"error": "Invalid phone_number or password"}, status=status.HTTP_400_BAD_REQUEST)

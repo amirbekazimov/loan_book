@@ -10,7 +10,7 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ['username', 'email']
     ordering = ['username']
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username', 'email', 'phone_number' , 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'is_shop_owner')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )

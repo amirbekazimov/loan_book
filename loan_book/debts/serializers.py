@@ -18,10 +18,18 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
+class CreditorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'first_name', 'phone_number']
+
+
 class DebtSerializer(serializers.ModelSerializer):
+    creditor = CreditorSerializer()
+
     class Meta:
         model = Debt
-        fields = '__all__'
+        fields = ['id', 'amount', 'due_date', 'description', 'is_paid', 'customer', 'creditor']
 
     def validate(self, data):
         if not self.context['request'].user.is_shop_owner:
