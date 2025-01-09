@@ -10,8 +10,8 @@ class CustomUser(AbstractUser):
 
 
 class Debt(models.Model):
-    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="debts")  # Debtor
-    creditor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="creditor_debts")  # Creditor
+    customer = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="debts")
+    creditor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="creditor_debts")
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     due_date = models.DateField()
     description = models.TextField(blank=True, null=True)

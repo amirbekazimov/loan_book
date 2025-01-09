@@ -24,8 +24,15 @@ class CreditorSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'phone_number']
 
 
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'username', 'first_name', 'phone_number']
+
+
 class DebtSerializer(serializers.ModelSerializer):
-    creditor = CreditorSerializer()
+    creditor = CreditorSerializer(required=False)
+    customer = CustomerSerializer(required=False)
 
     class Meta:
         model = Debt
@@ -35,3 +42,9 @@ class DebtSerializer(serializers.ModelSerializer):
         if not self.context['request'].user.is_shop_owner:
             raise serializers.ValidationError("Only shop owners can assign creditors.")
         return data
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        validated_data['creditor'] = user
+        validated_data['customer'] = user
+        return super().create(validated_data)
