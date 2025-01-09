@@ -36,11 +36,10 @@ class DebtDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self, pk, user):
-        try:
-            debt = Debt.objects.get(pk=pk, customer=user)
-            return debt
-        except Debt.DoesNotExist:
-            return None
+        debt = Debt.objects.filter(pk=pk, customer=user).first()
+        if not debt:
+            debt = Debt.objects.filter(pk=pk, creditor=user).first()
+        return debt
 
     def get(self, request, pk):
         debt = self.get_object(pk, request.user)
@@ -57,7 +56,7 @@ class DebtDetailView(APIView):
         if debt is None:
             return Response({"error": "Debt not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = DebtSerializer(debt, data=request.data)
+        serializer = DebtSerializer(debt, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
