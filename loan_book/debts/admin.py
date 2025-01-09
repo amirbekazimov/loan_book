@@ -10,21 +10,22 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ['username', 'email']
     ordering = ['username']
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'phone_number' , 'password')}),
+        (None, {'fields': ('username', 'email', 'phone_number', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'is_shop_owner')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'is_shop_owner')}
-         )
+            'fields': ('username', 'email', 'password', 'phone_number', 'is_shop_owner'),
+        }),
     )
 
 
 class DebtAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'creditor', 'amount', 'due_date', 'is_paid']
+    list_display = ['customer', 'creditor', 'amount', 'created_at', 'due_date', 'is_paid']
     list_filter = ['is_paid', 'due_date']
+    readonly_fields = ['created_at']
     search_fields = ['customer__username', 'creditor__username']
 
 

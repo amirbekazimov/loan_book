@@ -16,6 +16,7 @@ class Debt(models.Model):
     due_date = models.DateField()
     description = models.TextField(blank=True, null=True)
     is_paid = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.customer.username} owes {self.amount} to {self.creditor.username} - {'Paid' if self.is_paid else 'Not Paid'}"
